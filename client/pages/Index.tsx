@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Disclaimer from "@/components/site/Disclaimer";
-import { Instagram } from "lucide-react";
+import { Instagram, Heart, Utensils, Users, Target } from "lucide-react";
 
 export default function Index() {
   return (
