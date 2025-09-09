@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Disclaimer from "@/components/site/Disclaimer";
-import { Instagram } from "lucide-react";
+import { Instagram, Heart, Utensils, Users, Target } from "lucide-react";
 
 export default function Index() {
   return (
@@ -43,6 +43,7 @@ export default function Index() {
                 "Ongoing support and accountability",
                 "Flexible online coaching sessions",
                 "Safe, supportive environment",
+                "GLP-1 support and guidance",
               ].map((item) => (
                 <li
                   key={item}
@@ -109,25 +110,31 @@ export default function Index() {
             {
               title: "Health Coaching",
               desc: "Weekly check-ins, personalized guidance, and habit building.",
+              icon: Heart,
             },
             {
               title: "Meal Planning & Recipes",
               desc: "Lean & Green meals, shopping lists, and prep tips.",
+              icon: Utensils,
             },
             {
               title: "Accountability & Support",
               desc: "Motivation, mindset, and steady progress tracking.",
+              icon: Users,
             },
             {
               title: "Habit Formation",
               desc: "Small changes that compound into life-long health.",
+              icon: Target,
             },
           ].map((s) => (
             <div
               key={s.title}
               className="rounded-xl border bg-card p-6 shadow-sm"
             >
-              <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-accent" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent">
+                <s.icon className="h-5 w-5 text-white" aria-hidden="true" />
+              </div>
               <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{s.desc}</p>
             </div>
