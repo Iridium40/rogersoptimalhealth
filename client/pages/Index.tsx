@@ -43,6 +43,7 @@ export default function Index() {
                 "Ongoing support and accountability",
                 "Flexible online coaching sessions",
                 "Safe, supportive environment",
+                "GLP-1 support and guidance",
               ].map((item) => (
                 <li
                   key={item}
