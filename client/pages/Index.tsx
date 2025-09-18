@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Disclaimer from "@/components/site/Disclaimer";
+import NewsletterSubscription from "@/components/site/NewsletterSubscription";
 import { Instagram } from "lucide-react";
 
 export default function Index() {
@@ -165,6 +166,11 @@ export default function Index() {
             Read more about Lenee
           </Link>
         </div>
+      </section>
+
+      {/* Newsletter Subscription */}
+      <section className="mx-auto max-w-7xl px-4 py-14">
+        <NewsletterSubscription />
       </section>
 
       {/* Why OPTAVIA Works */}
