@@ -1,0 +1,29 @@
+{
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "outputDirectory": "dist/spa",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/assets/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "main": false,
+      "production": true
+    }
+  },
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
