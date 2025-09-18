@@ -21,22 +21,14 @@ The website includes a newsletter subscription feature that integrates with:
 3. Add your API key to the environment variables as `RESEND_API_KEY`
 4. Verify your sending domain in Resend (currently configured for `hello@rogersoptimalhealth.com`)
 
-### HubSpot (Contact Management)
-1. Create a [HubSpot](https://hubspot.com) account
-2. Generate a private app access token with the following scopes:
-   - `crm.objects.contacts.read`
-   - `crm.objects.contacts.write`
-3. Add your access token to the environment variables as `HUBSPOT_PRIVATE_APP_TOKEN`
+### Contact Management
+Contact information is managed through Resend's email service. New newsletter subscribers will receive a welcome email and their information will be logged for future reference.
 
 ## Environment Variables
 
 Copy `.env.example` to `.env` and fill in your values:
 
 ```bash
-# HubSpot Configuration
-HUBSPOT_PRIVATE_APP_TOKEN=your_hubspot_private_app_token_here
-HUBSPOT_PRIVATE_CLIENT_SECRET=your_hubspot_client_secret_here
-
 # Email Configuration (using Resend)
 RESEND_API_KEY=your_resend_api_key_here
 
@@ -68,7 +60,7 @@ pnpm start
 
 - **Email Validation**: Client and server-side validation
 - **Welcome Email**: Automatically sent via Resend with branded template
-- **HubSpot Integration**: Contacts are created/updated with newsletter subscription status
+- **Contact Logging**: Subscriber information is logged for future reference
 - **Error Handling**: Graceful fallbacks if services are unavailable
 - **Success States**: Visual feedback for successful subscriptions
 

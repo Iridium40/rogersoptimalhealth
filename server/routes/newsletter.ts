@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Resend } from "resend";
-import { Client } from "@hubspot/api-client";
 import { z } from "zod";
 
 const subscribeSchema = z.object({
@@ -8,44 +7,15 @@ const subscribeSchema = z.object({
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const hubspot = new Client({ accessToken: process.env.HUBSPOT_PRIVATE_APP_TOKEN });
 
 export async function handleNewsletterSubscribe(req: Request, res: Response) {
   try {
     // Validate request body
     const { email } = subscribeSchema.parse(req.body);
 
-    // Create or update contact in HubSpot
-    try {
-      await hubspot.crm.contacts.basicApi.create({
-        properties: {
-          email,
-          lifecyclestage: "subscriber",
-          hs_lead_status: "NEW",
-          source: "Newsletter Signup",
-          website: "rogersoptimalhealth.com",
-        },
-      });
-    } catch (hubspotError: any) {
-      // If contact already exists, update it
-      if (hubspotError.code === 409) {
-        try {
-          const existingContact = await hubspot.crm.contacts.basicApi.getByEmail(email);
-          await hubspot.crm.contacts.basicApi.update(existingContact.id, {
-            properties: {
-              lifecyclestage: "subscriber",
-              hs_lead_status: "NEW",
-              lastmodifieddate: new Date().toISOString(),
-            },
-          });
-        } catch (updateError) {
-          console.error("Error updating existing HubSpot contact:", updateError);
-        }
-      } else {
-        console.error("Error creating HubSpot contact:", hubspotError);
-        // Continue with email sending even if HubSpot fails
-      }
-    }
+    // Create contact in Resend audience (if you have audience management)
+    // For now, we'll just log the subscription and send the welcome email
+    console.log(`New newsletter subscription: ${email}`);
 
     // Send welcome email via Resend
     try {
