@@ -37,6 +37,19 @@ export default function Index() {
                 <Link to="/my-story">Read My Story</Link>
               </Button>
             </div>
+            
+            {/* Hero Newsletter Signup */}
+            <div className="mt-8 rounded-lg bg-primary/5 p-4">
+              <p className="mb-3 text-sm font-medium text-foreground/80">
+                💌 Get weekly health tips & Lean & Green recipes delivered to your inbox
+              </p>
+              <NewsletterSubscription 
+                variant="compact"
+                placeholder="Your email address"
+                buttonText="Join Free"
+              />
+            </div>
+            
             <ul className="mt-8 grid gap-3 text-sm text-foreground/80 sm:grid-cols-2">
               {[
                 "Personalized one-on-one coaching",
@@ -169,8 +182,11 @@ export default function Index() {
       </section>
 
       {/* Newsletter Subscription */}
-      <section className="mx-auto max-w-7xl px-4 py-14">
-        <NewsletterSubscription />
+      <section className="relative mx-auto max-w-7xl px-4 py-14">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent rounded-3xl" />
+        <div className="mx-auto max-w-2xl">
+          <NewsletterSubscription />
+        </div>
       </section>
 
       {/* Why OPTAVIA Works */}
