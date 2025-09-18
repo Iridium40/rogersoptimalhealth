@@ -310,8 +310,7 @@ export default function Privacy() {
       <h2>16. Disclaimer</h2>
       <p>
         <strong>Important:</strong> Lenee Rogers is an Independent OPTAVIA
-        Certified Health Coach. This website and its privacy practices are
-        separate from OPTAVIA's official website and privacy policy.
+        Certified Health Coach. This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by OPTAVIA LLC. This website and its privacy practices are completely separate from OPTAVIA's official website and privacy policy. For official OPTAVIA information, please visit optavia.com.
       </p>
       <p>
         <strong>Medical Disclaimer:</strong> This website does not provide

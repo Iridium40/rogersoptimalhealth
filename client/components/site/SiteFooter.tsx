@@ -17,7 +17,7 @@ export default function SiteFooter() {
               />
             </Link>
             <p className="mt-2 max-w-xs">
-              Personalized Optavia coaching for sustainable, healthy living.
+              Personalized health coaching for sustainable, healthy living.
             </p>
             <p className="mt-2 max-w-xs text-xs text-muted-foreground">
               This site does not provide medical advice. Consult your physician
@@ -89,10 +89,15 @@ export default function SiteFooter() {
           </div>
         </div>
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t pt-6 md:flex-row">
-          <p>
-            © {new Date().getFullYear()} Rogers Optimal Health. All rights
-            reserved.
-          </p>
+          <div className="text-center md:text-left">
+            <p>
+              © {new Date().getFullYear()} Rogers Optimal Health. All rights
+              reserved.
+            </p>
+            <p className="mt-1 text-xs">
+              This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by OPTAVIA LLC.
+            </p>
+          </div>
           <p>Built with love for healthy habits.</p>
         </div>
       </div>

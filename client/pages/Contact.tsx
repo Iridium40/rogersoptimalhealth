@@ -92,6 +92,9 @@ export default function Contact() {
           Results vary based on individual effort, adherence, and health
           history. We do not guarantee specific outcomes.
         </p>
+        <p className="mt-2">
+          <strong>Website Independence:</strong> This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by OPTAVIA LLC. For official OPTAVIA information, please visit optavia.com.
+        </p>
       </div>
     </div>
   );
