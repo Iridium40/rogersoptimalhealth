@@ -37,19 +37,6 @@ export default function Index() {
                 <Link to="/my-story">Read My Story</Link>
               </Button>
             </div>
-            
-            {/* Hero Newsletter Signup */}
-            <div className="mt-8 rounded-lg bg-primary/5 p-4">
-              <p className="mb-3 text-sm font-medium text-foreground/80">
-                💌 Get weekly health tips & Lean & Green recipes delivered to your inbox
-              </p>
-              <NewsletterSubscription 
-                variant="compact"
-                placeholder="Your email address"
-                buttonText="Join Free"
-              />
-            </div>
-            
             <ul className="mt-8 grid gap-3 text-sm text-foreground/80 sm:grid-cols-2">
               {[
                 "Personalized one-on-one coaching",
