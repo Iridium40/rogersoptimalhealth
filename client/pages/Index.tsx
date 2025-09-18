@@ -11,7 +11,7 @@ export default function Index() {
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(65%_40%_at_50%_-10%,theme(colors.secondary/70),transparent_70%)]" />
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-16 lg:grid-cols-12 lg:py-24">
-          <div className="lg:col-span-7">
+          <div className="order-2 lg:order-1 lg:col-span-7">
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
               Hi, I'm Lenee Rogers — Your Independent OPTAVIA Certified Health
               Coach
@@ -68,7 +68,7 @@ export default function Index() {
               ))}
             </ul>
           </div>
-          <div className="lg:col-span-5">
+          <div className="order-1 lg:order-2 lg:col-span-5">
             <div className="relative mx-auto aspect-[4/5] max-w-md overflow-hidden rounded-2xl border bg-gradient-to-br from-white to-secondary p-1 shadow-sm">
               <div className="absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,theme(colors.primary/10),transparent_50%,theme(colors.accent/10))]" />
               <div className="grid h-full place-items-center rounded-xl bg-white/70 backdrop-blur">
