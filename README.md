@@ -15,14 +15,17 @@ A health coaching website for Lenee Rogers, Independent OPTAVIA Certified Health
 
 The website includes a newsletter subscription feature that integrates with:
 
-### Resend (Email Delivery)
+### Resend (Email Delivery & Contact Management)
 1. Sign up for a [Resend](https://resend.com) account
 2. Create an API key in your Resend dashboard
-3. Add your API key to the environment variables as `RESEND_API_KEY`
-4. Verify your sending domain in Resend (currently configured for `hello@rogersoptimalhealth.com`)
+3. Create an audience for your newsletter subscribers
+4. Add your API key and audience ID to the environment variables:
+   - `RESEND_API_KEY` - Your Resend API key
+   - `RESEND_AUDIENCE_ID` - Your audience ID for newsletter subscribers
+5. Verify your sending domain in Resend (currently configured for `hello@rogersoptimalhealth.com`)
 
 ### Contact Management
-Contact information is managed through Resend's email service. New newsletter subscribers will receive a welcome email and their information will be logged for future reference.
+Contact information is managed through Resend's audience system. New newsletter subscribers are automatically added to your Resend audience and receive a welcome email.
 
 ## Environment Variables
 
@@ -31,6 +34,9 @@ Copy `.env.example` to `.env` and fill in your values:
 ```bash
 # Email Configuration (using Resend)
 RESEND_API_KEY=your_resend_api_key_here
+
+# Resend Audience ID for contact management
+RESEND_AUDIENCE_ID=your_audience_id_here
 
 # Email addresses
 ADMIN_EMAIL=admin@rogersoptimalhealth.com
@@ -60,7 +66,7 @@ pnpm start
 
 - **Email Validation**: Client and server-side validation
 - **Welcome Email**: Automatically sent via Resend with branded template
-- **Contact Logging**: Subscriber information is logged for future reference
+- **Contact Management**: Subscribers are automatically added to Resend audience
 - **Error Handling**: Graceful fallbacks if services are unavailable
 - **Success States**: Visual feedback for successful subscriptions
 

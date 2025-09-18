@@ -13,9 +13,36 @@ export async function handleNewsletterSubscribe(req: Request, res: Response) {
     // Validate request body
     const { email } = subscribeSchema.parse(req.body);
 
-    // Create contact in Resend audience (if you have audience management)
-    // For now, we'll just log the subscription and send the welcome email
-    console.log(`New newsletter subscription: ${email}`);
+    // Create contact in Resend audience
+    try {
+      const audienceId = process.env.RESEND_AUDIENCE_ID;
+      if (audienceId && process.env.RESEND_API_KEY) {
+        const response = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            unsubscribed: false,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error creating Resend contact:", errorData);
+          // Continue with email sending even if contact creation fails
+        } else {
+          console.log(`Successfully added ${email} to Resend audience`);
+        }
+      } else {
+        console.log(`New newsletter subscription: ${email} (audience creation skipped - missing config)`);
+      }
+    } catch (contactError) {
+      console.error("Error creating Resend contact:", contactError);
+      // Continue with email sending even if contact creation fails
+    }
 
     // Send welcome email via Resend
     try {
