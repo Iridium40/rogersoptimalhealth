@@ -3,6 +3,7 @@ import { z } from "zod";
 
 const subscribeSchema = z.object({
   email: z.string().email("Invalid email address"),
+  token: z.string().optional(), // Turnstile token
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -28,7 +29,96 @@ export default async function handler(req, res) {
 
   try {
     // Validate request body
-    const { email } = subscribeSchema.parse(req.body);
+    const { email, token } = subscribeSchema.parse(req.body);
+
+    // 1. Verify Turnstile token if configured
+    if (process.env.TURNSTILE_SECRET_KEY) {
+      if (!token) {
+        return res.status(400).json({
+          error: "Verification failed. Please try again.",
+        });
+      }
+
+      try {
+        const turnstileResponse = await fetch(
+          "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              secret: process.env.TURNSTILE_SECRET_KEY,
+              response: token,
+            }),
+          }
+        );
+
+        const turnstileData = await turnstileResponse.json();
+
+        if (!turnstileData.success) {
+          console.error("Turnstile verification failed:", turnstileData);
+          return res.status(400).json({
+            error: "Verification failed. Please try again.",
+          });
+        }
+
+        console.log("Turnstile verification successful");
+      } catch (turnstileError) {
+        console.error("Turnstile verification error:", turnstileError);
+        return res.status(500).json({
+          error: "Verification service error. Please try again later.",
+        });
+      }
+    }
+
+    // 2. Basic email format validation (already done by Zod, but additional regex check)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        error: "Invalid email format",
+      });
+    }
+
+    // 3. Verify email with Emailable (if configured)
+    if (process.env.EMAILABLE_API_KEY) {
+      try {
+        const emailableResponse = await fetch(
+          `https://api.emailable.com/v1/verify?email=${encodeURIComponent(email)}&api_key=${process.env.EMAILABLE_API_KEY}`
+        );
+
+        if (!emailableResponse.ok) {
+          console.error(
+            `Emailable API error: ${emailableResponse.status} ${emailableResponse.statusText}`
+          );
+          // Continue with subscription if API call fails (graceful fallback)
+        } else {
+          const emailableResult = await emailableResponse.json();
+
+          // Reject invalid emails based on Emailable verification
+          if (
+            emailableResult.state === "undeliverable" ||
+            emailableResult.state === "risky"
+          ) {
+            console.log(
+              `Email rejected by Emailable: ${email} - state: ${emailableResult.state}`
+            );
+            return res.status(400).json({
+              error: "Please enter a valid email address",
+            });
+          }
+
+          // Log verification result for monitoring
+          console.log(
+            `Email verified by Emailable: ${email} - state: ${emailableResult.state}`
+          );
+        }
+      } catch (emailableError) {
+        console.error("Emailable verification error:", emailableError);
+        // Continue with subscription even if Emailable verification fails
+        // to avoid blocking legitimate users due to service issues
+      }
+    }
 
     // Create contact in Resend audience
     try {

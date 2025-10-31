@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +14,22 @@ interface NewsletterSubscriptionProps {
   variant?: "default" | "compact" | "inline";
 }
 
+// Declare Turnstile types
+declare global {
+  interface Window {
+    turnstile: {
+      render: (element: HTMLElement, options: {
+        sitekey: string;
+        callback: (token: string) => void;
+        'error-callback'?: () => void;
+        'expired-callback'?: () => void;
+      }) => string;
+      reset: (widgetId: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
+
 export default function NewsletterSubscription({
   title = "Join the Rogers Optimal Health Community",
   description = "Get weekly health tips, Lean & Green recipes, and exclusive content delivered to your inbox.",
@@ -25,6 +41,92 @@ export default function NewsletterSubscription({
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+  const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || "";
+
+  // Load Turnstile script
+  useEffect(() => {
+    if (!turnstileSiteKey) {
+      console.warn("Turnstile site key not configured");
+      return;
+    }
+
+    // Check if script is already loaded
+    if (document.querySelector('script[src*="turnstile"]')) {
+      // Script already loaded, just render widget if ref is ready
+      const renderWidget = () => {
+        if (turnstileRef.current && window.turnstile && !widgetIdRef.current) {
+          widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+            sitekey: turnstileSiteKey,
+            callback: (token: string) => {
+              setTurnstileToken(token);
+            },
+            'error-callback': () => {
+              setTurnstileToken(null);
+            },
+            'expired-callback': () => {
+              setTurnstileToken(null);
+            },
+          });
+        }
+      };
+
+      // Try to render immediately, or wait a bit for DOM
+      if (window.turnstile && turnstileRef.current) {
+        renderWidget();
+      } else {
+        const timer = setTimeout(renderWidget, 100);
+        return () => clearTimeout(timer);
+      }
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    const renderWidget = () => {
+      if (turnstileRef.current && window.turnstile && !widgetIdRef.current) {
+        widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+          sitekey: turnstileSiteKey,
+          callback: (token: string) => {
+            setTurnstileToken(token);
+          },
+          'error-callback': () => {
+            setTurnstileToken(null);
+          },
+          'expired-callback': () => {
+            setTurnstileToken(null);
+          },
+        });
+      }
+    };
+
+    script.onload = () => {
+      // Wait a bit for ref to be ready
+      setTimeout(renderWidget, 100);
+    };
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        try {
+          window.turnstile.remove(widgetIdRef.current);
+          widgetIdRef.current = null;
+        } catch (e) {
+          console.warn("Error removing Turnstile widget:", e);
+        }
+      }
+      // Only remove script if we added it (check if it's our script)
+      const existingScript = document.querySelector('script[src*="turnstile"]');
+      if (existingScript && existingScript === script) {
+        document.body.removeChild(script);
+      }
+    };
+  }, [turnstileSiteKey]);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,6 +154,16 @@ export default function NewsletterSubscription({
       return;
     }
 
+    // Check for Turnstile token if site key is configured
+    if (turnstileSiteKey && !turnstileToken) {
+      toast({
+        title: "Verification Required",
+        description: "Please complete the verification to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -61,7 +173,10 @@ export default function NewsletterSubscription({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ 
+          email: email.trim(),
+          token: turnstileToken 
+        }),
       });
 
       console.log("Response status:", response.status);
@@ -91,6 +206,11 @@ export default function NewsletterSubscription({
       if (data && typeof data === 'object' && data.success === true) {
         setIsSubscribed(true);
         setEmail("");
+        setTurnstileToken(null);
+        // Reset Turnstile widget if it exists
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.reset(widgetIdRef.current);
+        }
         toast({
           title: "Successfully Subscribed!",
           description: "Thank you for joining the Rogers Optimal Health community. Check your email for a welcome message.",
@@ -129,7 +249,7 @@ export default function NewsletterSubscription({
   if (variant === "compact") {
     return (
       <div className={`${className}`}>
-        <form onSubmit={handleSubmit} className="flex gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <Input
             type="email"
             placeholder={placeholder}
@@ -138,6 +258,9 @@ export default function NewsletterSubscription({
             disabled={isLoading}
             className="flex-1"
           />
+          {turnstileSiteKey && (
+            <div ref={turnstileRef} className="flex justify-center"></div>
+          )}
           <Button type="submit" disabled={isLoading} size="sm">
             {isLoading ? "..." : buttonText}
           </Button>
@@ -149,7 +272,7 @@ export default function NewsletterSubscription({
   if (variant === "inline") {
     return (
       <div className={`${className}`}>
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex-1">
             <Input
               type="email"
@@ -160,6 +283,9 @@ export default function NewsletterSubscription({
               className="w-full"
             />
           </div>
+          {turnstileSiteKey && (
+            <div ref={turnstileRef} className="flex justify-center"></div>
+          )}
           <Button type="submit" disabled={isLoading} className="sm:w-auto">
             {isLoading ? "Subscribing..." : buttonText}
           </Button>
@@ -189,6 +315,9 @@ export default function NewsletterSubscription({
               className="w-full"
             />
           </div>
+          {turnstileSiteKey && (
+            <div ref={turnstileRef} className="flex justify-center"></div>
+          )}
           <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? "Subscribing..." : buttonText}
           </Button>
