@@ -115,7 +115,7 @@ export default function BookAssessment() {
               </h1>
               <p className="mt-4 text-lg text-muted-foreground">
                 A 30-minute conversation to learn about your goals and share how
-                the Optavia program and personalized coaching can help. No
+                the Trilivy program and personalized coaching can help. No
                 pressure—just helpful, practical guidance.
               </p>
               {!calendlyUrl && (

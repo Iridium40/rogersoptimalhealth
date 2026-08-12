@@ -215,7 +215,7 @@ function getWelcomeEmailTemplate(email) {
       <div class="content">
         <p>Hi there!</p>
         
-        <p>Thank you so much for subscribing to the Rogers Optimal Health newsletter! I'm Lenee Rogers, your Independent OPTAVIA Certified Health Coach, and I'm thrilled to have you join our community.</p>
+        <p>Thank you so much for subscribing to the Rogers Optimal Health newsletter! I'm Lenee Rogers, your Independent Trilivy Certified Health Coach, and I'm thrilled to have you join our community.</p>
         
         <div class="highlight">
           <h3>🎯 What to Expect:</h3>
@@ -244,7 +244,7 @@ function getWelcomeEmailTemplate(email) {
         
         <p>To your optimal health,<br>
         <strong>Lenee Rogers</strong><br>
-        Independent OPTAVIA Certified Health Coach</p>
+        Independent Trilivy Certified Health Coach</p>
       </div>
       
       <div class="footer">

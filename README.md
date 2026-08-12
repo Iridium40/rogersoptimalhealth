@@ -1,6 +1,6 @@
 # Rogers Optimal Health Website
 
-A health coaching website for Lenee Rogers, Independent OPTAVIA Certified Health Coach.
+A health coaching website for Lenee Rogers, Independent Trilivy Certified Health Coach.
 
 ## Features
 

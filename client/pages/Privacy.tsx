@@ -16,7 +16,7 @@ export default function Privacy() {
         Welcome to WellSmith ("we," "our," or "us"). This Privacy Policy
         explains how we collect, use, and protect your personal information when
         you visit our website {website} or use our services. WellSmith is the
-        personal brand of Lenee Rogers, an Independent OPTAVIA Certified Health
+        personal brand of Lenee Rogers, an Independent Trilivy Certified Health
         Coach.
       </p>
       <p>
@@ -66,7 +66,7 @@ export default function Privacy() {
       <ul>
         <li>
           <strong>Health Coaching Services:</strong> To provide personalized
-          health coaching and OPTAVIA program guidance
+          health coaching and Trilivy program guidance
         </li>
         <li>
           <strong>Communication:</strong> To respond to your inquiries, schedule
@@ -103,8 +103,8 @@ export default function Privacy() {
       </p>
       <ul>
         <li>
-          <strong>OPTAVIA System:</strong> If you choose to enroll in OPTAVIA
-          programs, your information will be shared with OPTAVIA's official
+          <strong>Trilivy System:</strong> If you choose to enroll in Trilivy
+          programs, your information will be shared with Trilivy's official
           system for program enrollment and support
         </li>
         <li>
@@ -209,9 +209,9 @@ export default function Privacy() {
       <p>Our website may contain links to third-party websites, including:</p>
       <ul>
         <li>
-          <strong>OPTAVIA's Official Website:</strong>{" "}
-          <a href="https://www.optavia.com" target="_blank" rel="noreferrer">
-            https://www.optavia.com
+          <strong>Trilivy's Official Website:</strong>{" "}
+          <a href="https://www.trilivyhealth.com" target="_blank" rel="noreferrer">
+            https://www.trilivyhealth.com
           </a>
         </li>
         <li>
@@ -298,7 +298,7 @@ export default function Privacy() {
       <p>
         <strong>Lenee Rogers - WellSmith</strong>
         <br />
-        <strong>Independent OPTAVIA Certified Health Coach</strong>
+        <strong>Independent Trilivy Certified Health Coach</strong>
         <br />
         <strong>Email:</strong> Leneerogers@gmail.com
         <br />
@@ -309,8 +309,8 @@ export default function Privacy() {
 
       <h2>16. Disclaimer</h2>
       <p>
-        <strong>Important:</strong> Lenee Rogers is an Independent OPTAVIA
-        Certified Health Coach. This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by OPTAVIA LLC. This website and its privacy practices are completely separate from OPTAVIA's official website and privacy policy. For official OPTAVIA information, please visit optavia.com.
+        <strong>Important:</strong> Lenee Rogers is an Independent Trilivy
+        Certified Health Coach. This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by Trilivy. This website and its privacy practices are completely separate from Trilivy's official website and privacy policy. For official Trilivy information, please visit trilivyhealth.com.
       </p>
       <p>
         <strong>Medical Disclaimer:</strong> This website does not provide

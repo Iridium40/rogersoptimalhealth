@@ -18,7 +18,7 @@ export default function WhyCoaching() {
           Client Support
         </h1>
         <p className="text-lg text-muted-foreground">
-          Practical tips for success on OPTAVIA's Optimal Weight 5 & 1 Plan®,
+          Practical tips for success on Trilivy's Optimal Weight 5 & 1 Plan®,
           hydration guidance, and coaching resources—everything in one place.
         </p>
         <div className="mt-4 flex items-center justify-center gap-3">

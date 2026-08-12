@@ -15,11 +15,11 @@ export default function Disclaimer({ className = "" }: { className?: string }) {
       </p>
       <p className="mt-2">
         *Medical advice, treatment, prescriptions, and the overall practice of
-        medicine must be provided by a licensed healthcare professional. OPTAVIA
+        medicine must be provided by a licensed healthcare professional. Trilivy
         and its coaches do not engage in or provide any medical services.
       </p>
       <p className="mt-2">
-        Lenee Rogers is an Independent OPTAVIA Certified Health Coach. This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by OPTAVIA LLC. For official OPTAVIA information, please visit optavia.com.
+        Lenee Rogers is an Independent Trilivy Certified Health Coach. This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by Trilivy. For official Trilivy information, please visit trilivyhealth.com.
       </p>
     </div>
   );

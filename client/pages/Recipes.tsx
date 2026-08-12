@@ -72,7 +72,7 @@ export default function Recipes() {
               return "";
             }
           };
-          const fallbackBoard = "https://www.pinterest.com/optavia/lean-green/";
+          const fallbackBoard = "https://www.pinterest.com/trilivy/lean-green/";
           const path = toPath(fallbackBoard);
           if (path) {
             try {
@@ -139,7 +139,7 @@ export default function Recipes() {
       </h1>
       <p className="mt-3 text-lg text-muted-foreground">
         Ideas pulled from a public Pinterest board. Always follow your specific
-        OPTAVIA plan guidelines.
+        Trilivy plan guidelines.
       </p>
 
       {loading && (
@@ -202,7 +202,7 @@ export default function Recipes() {
         </>
       )}
       <div className="mt-10 rounded-2xl border bg-white p-4 text-xs text-muted-foreground">
-        Follow your specific OPTAVIA plan guidelines. Consult with your coach
+        Follow your specific Trilivy plan guidelines. Consult with your coach
         for personalized meal planning.
       </div>
     </div>

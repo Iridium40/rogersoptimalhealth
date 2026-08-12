@@ -9,39 +9,39 @@ export default function Contact() {
     <div className="mx-auto max-w-4xl px-4 py-16">
       <SEO
         title="Connect with Lenee Rogers | Rogers Optimal Health"
-        description="Get in touch with Lenee Rogers for coaching inquiries, OPTAVIA guidance, and support. Connect via social or schedule time."
+        description="Get in touch with Lenee Rogers for coaching inquiries, Trilivy guidance, and support. Connect via social or schedule time."
         image="https://cdn.builder.io/api/v1/image/assets%2Fa42b6f9ec53e4654a92af75aad56d14f%2F67f507b077de46a0bb2324ea8656430b?format=webp&width=1200"
       />
       <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
         Connect with Lenee
       </h1>
       <p className="mt-3 text-lg text-muted-foreground">
-        Start your journey through OPTAVIA's official system.
+        Start your journey through Trilivy's official system.
       </p>
 
       <div className="mt-8 rounded-2xl border bg-card p-6 shadow-sm">
         <p className="text-sm text-foreground/80">
-          Optavia Coach Profile:{" "}
+          Trilivy Coach Profile:{" "}
           <a
             className="text-primary hover:underline"
-            href="https://www.optavia.com/us/en/coach//leneerogers"
+            href="https://www.trilivyhealth.com/us/en/coach/leneerogers"
             target="_blank"
             rel="noreferrer"
           >
-            optavia.com//leneerogers
+            trilivyhealth.com/us/en/coach/leneerogers
           </a>
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Button asChild variant="gradient">
             <a
               href={
-                import.meta.env.VITE_OPTAVIA_COACH_URL ||
-                "https://www.optavia.com/us/en/coach//leneerogers"
+                import.meta.env.VITE_TRILIVY_COACH_URL ||
+                "https://www.trilivyhealth.com/us/en/coach/leneerogers"
               }
               target="_blank"
               rel="noreferrer"
             >
-              Connect via OPTAVIA
+              Connect via Trilivy
             </a>
           </Button>
           <Button asChild>
@@ -93,7 +93,7 @@ export default function Contact() {
           history. We do not guarantee specific outcomes.
         </p>
         <p className="mt-2">
-          <strong>Website Independence:</strong> This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by OPTAVIA LLC. For official OPTAVIA information, please visit optavia.com.
+          <strong>Website Independence:</strong> This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by Trilivy. For official Trilivy information, please visit trilivyhealth.com.
         </p>
       </div>
     </div>

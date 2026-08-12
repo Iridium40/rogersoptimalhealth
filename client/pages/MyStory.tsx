@@ -48,11 +48,11 @@ export default function MyStory() {
             achievable.
           </p>
 
-          <h2>Optavia Expertise</h2>
+          <h2>Trilivy Expertise</h2>
           <p>
             One of the key resources I utilize in my coaching practice is
-            Optavia. This is a clinically proven plan with scientifically
-            developed products called fuelings. By leveraging Optavia's proven
+            Trilivy. This is a clinically proven plan with scientifically
+            developed products called fuelings. By leveraging Trilivy's proven
             strategies and tools, I ensure that my clients have access to
             effective resources to support their transformational journey.
           </p>
@@ -78,8 +78,8 @@ export default function MyStory() {
           <div className="mt-6">
             <a
               href={
-                import.meta.env.VITE_OPTAVIA_COACH_URL ||
-                "https://www.optavia.com/us/en/coach//leneerogers"
+                import.meta.env.VITE_TRILIVY_COACH_URL ||
+                "https://www.trilivyhealth.com/us/en/coach/leneerogers"
               }
               target="_blank"
               rel="noreferrer"

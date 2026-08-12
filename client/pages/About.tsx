@@ -35,7 +35,7 @@ export default function About() {
               </p>
               <div className="mt-4 flex flex-wrap gap-2 text-sm">
                 <span className="rounded-full bg-primary/10 px-3 py-1 text-primary">
-                  Independent Certified Optavia coach
+                  Independent Certified Trilivy coach
                 </span>
                 <span className="rounded-full bg-accent/10 px-3 py-1 text-accent">
                   Shriners mama

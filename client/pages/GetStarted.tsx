@@ -5,12 +5,12 @@ export default function GetStarted() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
       <SEO
-        title="Get Started with OPTAVIA | Rogers Optimal Health"
-        description="Overview of the OPTAVIA program and what to expect working with coach Lenee Rogers."
+        title="Get Started with Trilivy | Rogers Optimal Health"
+        description="Overview of the Trilivy program and what to expect working with coach Lenee Rogers."
         image="https://cdn.builder.io/api/v1/image/assets%2Fa42b6f9ec53e4654a92af75aad56d14f%2F67f507b077de46a0bb2324ea8656430b?format=webp&width=1200"
       />
       <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-        Get Started with OPTAVIA
+        Get Started with Trilivy
       </h1>
       <p className="mt-3 text-lg text-muted-foreground">
         Official program overview and next steps
@@ -39,8 +39,8 @@ export default function GetStarted() {
       <div className="mt-8 flex flex-wrap gap-3">
         <a
           href={
-            import.meta.env.VITE_OPTAVIA_COACH_URL ||
-            "https://www.optavia.com/us/en/coach//leneerogers"
+            import.meta.env.VITE_TRILIVY_COACH_URL ||
+            "https://www.trilivyhealth.com/us/en/coach/leneerogers"
           }
           target="_blank"
           rel="noreferrer"
@@ -49,12 +49,12 @@ export default function GetStarted() {
           Start Your Journey
         </a>
         <a
-          href="https://www.optavia.com/us/en/optavia-program"
+          href="https://www.trilivyhealth.com/us/en"
           target="_blank"
           rel="noreferrer"
           className="inline-flex h-11 items-center justify-center rounded-md border px-6 hover:bg-secondary"
         >
-          Learn More About OPTAVIA
+          Learn More About Trilivy
         </a>
       </div>
 

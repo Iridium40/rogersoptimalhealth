@@ -11,7 +11,7 @@ export default function ProgramOverview() {
             Program Overview
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-            The Optavia approach pairs a scientifically designed nutrition plan
+            The Trilivy approach pairs a scientifically designed nutrition plan
             with daily coaching and community support. Here's what working
             together looks like.
           </p>

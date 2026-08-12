@@ -13,7 +13,7 @@ export default function Index() {
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-16 lg:grid-cols-12 lg:py-24">
           <div className="order-2 lg:order-1 lg:col-span-7">
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-              Hi, I'm Lenee Rogers — Your Independent OPTAVIA Certified Health
+              Hi, I'm Lenee Rogers — Your Independent Trilivy Certified Health
               Coach
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
@@ -24,8 +24,8 @@ export default function Index() {
               <Button asChild size="lg" className="shadow" variant="gradient">
                 <a
                   href={
-                    import.meta.env.VITE_OPTAVIA_COACH_URL ||
-                    "https://www.optavia.com/us/en/coach//leneerogers"
+                    import.meta.env.VITE_TRILIVY_COACH_URL ||
+                    "https://www.trilivyhealth.com/us/en/coach/leneerogers"
                   }
                   target="_blank"
                   rel="noreferrer"
@@ -40,7 +40,7 @@ export default function Index() {
             <ul className="mt-8 grid gap-3 text-sm text-foreground/80 sm:grid-cols-2">
               {[
                 "Personalized one-on-one coaching",
-                "Proven Optavia program results",
+                "Proven Trilivy program results",
                 "Ongoing support and accountability",
                 "Flexible online coaching sessions",
                 "Safe, supportive environment",
@@ -79,7 +79,7 @@ export default function Index() {
                   </p>
                   <p className="text-2xl font-bold">Lenee Rogers</p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Independent OPTAVIA Certified Health Coach
+                    Independent Trilivy Certified Health Coach
                   </p>
                   <div className="mt-3 text-sm">
                     <a
@@ -153,7 +153,7 @@ export default function Index() {
             Tailors realistic, achievable plans to each unique journey.
           </li>
           <li>
-            <span className="font-semibold">Optavia Expertise:</span> Uses a
+            <span className="font-semibold">Trilivy Expertise:</span> Uses a
             clinically proven plan and fuelings to support transformation.
           </li>
           <li className="sm:col-span-2">
@@ -176,9 +176,9 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Why OPTAVIA Works */}
+      {/* Why Trilivy Works */}
       <section className="mx-auto max-w-7xl px-4 py-14">
-        <h2 className="text-2xl font-bold tracking-tight">Why OPTAVIA Works</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Why Trilivy Works</h2>
         <ul className="mt-4 grid gap-3 text-sm text-foreground/80 sm:grid-cols-2 lg:grid-cols-3">
           <li className="rounded-lg border bg-white/60 px-4 py-3">
             Average weight loss on the Optimal Weight 5 & 1 Plan® is 12 pounds*

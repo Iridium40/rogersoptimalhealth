@@ -53,8 +53,8 @@ export default function SiteHeader() {
           <Button asChild size="lg" variant="gradient" className="shadow-sm">
             <a
               href={
-                import.meta.env.VITE_OPTAVIA_COACH_URL ||
-                "https://www.optavia.com/us/en/coach//leneerogers"
+                import.meta.env.VITE_TRILIVY_COACH_URL ||
+                "https://www.trilivyhealth.com/us/en/coach/leneerogers"
               }
               target="_blank"
               rel="noreferrer"

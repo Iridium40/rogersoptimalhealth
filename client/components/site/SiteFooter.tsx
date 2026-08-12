@@ -39,8 +39,8 @@ export default function SiteFooter() {
             </Link>
             <a
               href={
-                import.meta.env.VITE_OPTAVIA_COACH_URL ||
-                "https://www.optavia.com/us/en/coach//leneerogers"
+                import.meta.env.VITE_TRILIVY_COACH_URL ||
+                "https://www.trilivyhealth.com/us/en/coach/leneerogers"
               }
               target="_blank"
               rel="noreferrer"
@@ -49,12 +49,12 @@ export default function SiteFooter() {
               Start Your Journey
             </a>
             <a
-              href="https://www.optavia.com/us/en/coach//leneerogers"
+              href="https://www.trilivyhealth.com/us/en/coach/leneerogers"
               target="_blank"
               rel="noreferrer"
               className="hover:text-foreground"
             >
-              OPTAVIA Coach Profile
+              Trilivy Coach Profile
             </a>
             <a
               href="https://www.facebook.com/leneebiglane.rogers"
@@ -77,8 +77,8 @@ export default function SiteFooter() {
             <div className="font-medium text-foreground">Ready to begin?</div>
             <a
               href={
-                import.meta.env.VITE_OPTAVIA_COACH_URL ||
-                "https://www.optavia.com/us/en/coach//leneerogers"
+                import.meta.env.VITE_TRILIVY_COACH_URL ||
+                "https://www.trilivyhealth.com/us/en/coach/leneerogers"
               }
               target="_blank"
               rel="noreferrer"
@@ -95,7 +95,7 @@ export default function SiteFooter() {
               reserved.
             </p>
             <p className="mt-1 text-xs">
-              This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by OPTAVIA LLC.
+              This website is independently operated by Lenee Rogers and is not affiliated with, endorsed by, or operated by Trilivy.
             </p>
           </div>
           <p>Built with love for healthy habits.</p>
