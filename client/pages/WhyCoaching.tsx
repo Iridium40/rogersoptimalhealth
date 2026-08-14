@@ -10,7 +10,7 @@ export default function WhyCoaching() {
     <div className="mx-auto max-w-6xl px-4 py-16">
       <SEO
         title="Client Support | Rogers Optimal Health"
-        description="Success tips for the 5 & 1 Plan, hydration guidance, and practical coaching resources curated by Lenee Rogers."
+        description="Success tips for the 5&1 Reset Plan, hydration guidance, and practical coaching resources curated by Lenee Rogers."
         image="https://cdn.builder.io/api/v1/image/assets%2Fa42b6f9ec53e4654a92af75aad56d14f%2F67f507b077de46a0bb2324ea8656430b?format=webp&width=1200"
       />
       <div className="flex flex-col gap-3 sm:gap-4">
@@ -18,7 +18,7 @@ export default function WhyCoaching() {
           Client Support
         </h1>
         <p className="text-lg text-muted-foreground">
-          Practical tips for success on Trilivy's Optimal Weight 5 & 1 Plan®,
+          Practical tips for success on Trilivy's 5&1 Reset Plan,
           hydration guidance, and coaching resources—everything in one place.
         </p>
         <div className="mt-4 flex items-center justify-center gap-3">
@@ -32,7 +32,7 @@ export default function WhyCoaching() {
             buttonLabel="Share Client Support"
             size="sm"
             title="Client Support | WellSmith"
-            description="Tips for success on the 5 & 1 Plan, hydration guidance, and resources."
+            description="Tips for success on the 5&1 Reset Plan, hydration guidance, and resources."
           />
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function WhyCoaching() {
       {/* Client Success */}
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <h2 className="text-xl font-bold">Success Tips for the 5 & 1 Plan</h2>
+          <h2 className="text-xl font-bold">Success Tips for the 5&1 Reset Plan</h2>
           <ul className="mt-3 grid gap-2 text-sm text-foreground/80">
             <li>
               Eat all 5 fuelings plus 1 Lean & Green—set reminders if needed.

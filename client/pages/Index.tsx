@@ -181,7 +181,7 @@ export default function Index() {
         <h2 className="text-2xl font-bold tracking-tight">Why Trilivy Works</h2>
         <ul className="mt-4 grid gap-3 text-sm text-foreground/80 sm:grid-cols-2 lg:grid-cols-3">
           <li className="rounded-lg border bg-white/60 px-4 py-3">
-            Average weight loss on the Optimal Weight 5 & 1 Plan® is 12 pounds*
+            Average weight loss on the Reset Plan is 12 pounds*
           </li>
           <li className="rounded-lg border bg-white/60 px-4 py-3">
             More than 3 million lives impacted and counting

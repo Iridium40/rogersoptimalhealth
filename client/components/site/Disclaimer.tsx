@@ -10,8 +10,8 @@ export default function Disclaimer({ className = "" }: { className?: string }) {
         Important Disclaimers
       </h2>
       <p className="mt-2">
-        *Average weight loss on the Optimal Weight 5 & 1 Plan® is 12 pounds.
-        Clients are in weight loss, on average, for 12 weeks.
+        *Average weight loss on the Reset Plan is 12 pounds. Clients are in
+        weight loss, on average, for 12 weeks.
       </p>
       <p className="mt-2">
         *Medical advice, treatment, prescriptions, and the overall practice of
