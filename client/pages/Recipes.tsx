@@ -72,7 +72,8 @@ export default function Recipes() {
               return "";
             }
           };
-          const fallbackBoard = "https://www.pinterest.com/trilivy/lean-green/";
+          const fallbackBoard =
+            "https://www.pinterest.com/leneerogers/recipes/";
           const path = toPath(fallbackBoard);
           if (path) {
             try {
