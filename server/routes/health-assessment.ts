@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
-import nodemailer from "nodemailer";
+import { createHash } from "node:crypto";
+import { Resend } from "resend";
 import { z } from "zod";
 import type {
   HealthAssessmentRequest,
@@ -28,8 +29,8 @@ const schema = z.object({
   otherConditions: z.string().optional().default(""),
   onMedications: z.boolean().optional().default(false),
   medications: z.string().optional().default(""),
-  sleepQuality: z.number().int().min(1).max(5).optional().default(0),
-  energyLevel: z.number().int().min(1).max(5).optional().default(0),
+  sleepQuality: z.number().int().min(1).max(5).optional(),
+  energyLevel: z.number().int().min(1).max(5).optional(),
   mealsPerDay: z.number().int().min(0).max(15).optional().default(0),
   snacksPerDay: z.number().int().min(0).max(20).optional().default(0),
   waterIntakeOz: z.number().int().min(0).max(1000).optional().default(0),
@@ -39,7 +40,7 @@ const schema = z.object({
   exerciseTypes: z.string().optional().default(""),
   wakeTime: z.string().optional().default(""),
   bedTime: z.string().optional().default(""),
-  commitment: z.number().int().min(1).max(10).optional().default(0),
+  commitment: z.number().int().min(1).max(10).optional(),
   additionalNotes: z.string().optional().default(""),
 });
 
@@ -59,28 +60,18 @@ export const handleHealthAssessment: RequestHandler = async (req, res) => {
   }
   const data = parsed.data as HealthAssessmentRequest;
 
-  const smtpHost = process.env.SMTP_HOST;
-  const smtpPort = process.env.SMTP_PORT
-    ? Number(process.env.SMTP_PORT)
-    : undefined;
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
-  const from = process.env.SMTP_FROM || smtpUser || "no-reply@example.com";
-  const to = "Leneerogers@gmail.com";
-
-  if (!smtpHost || !smtpPort || !smtpUser || !smtpPass) {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("RESEND_API_KEY is not configured");
     return res.status(500).json({
       ok: false,
-      error: "SMTP not configured (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS)",
+      error: "Email is not configured (RESEND_API_KEY)",
     });
   }
 
-  const transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465, // true for 465, false for other ports
-    auth: { user: smtpUser, pass: smtpPass },
-  });
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const fromEmail = process.env.FROM_EMAIL || "hello@rogersoptimalhealth.com";
+  const from = `Rogers Optimal Health <${fromEmail}>`;
+  const to = process.env.ADMIN_EMAIL || "Leneerogers@gmail.com";
 
   const fullName = `${data.firstName} ${data.lastName}`.trim();
   const subject = `${fullName} + Health Assessment`;
@@ -136,18 +127,36 @@ export const handleHealthAssessment: RequestHandler = async (req, res) => {
     ${data.additionalNotes ? `<h3 style=\"margin:24px 0 8px\">Additional Notes</h3><p>${htmlEscape(data.additionalNotes)}</p>` : ""}
   </div>`;
 
+  // Keyed on the payload itself: a double-submit of identical answers is
+  // de-duplicated, while a genuinely different submission always sends.
+  const idempotencyKey = `health-assessment/${createHash("sha256")
+    .update(JSON.stringify(data))
+    .digest("hex")
+    .slice(0, 32)}`;
+
   try {
-    await transporter.sendMail({
-      from,
-      to,
-      subject,
-      html,
-      replyTo: data.email,
-    });
+    // The Resend SDK reports API failures via `error`, it does not throw.
+    const { data: sent, error } = await resend.emails.send(
+      {
+        from,
+        to: [to],
+        subject,
+        html,
+        replyTo: data.email,
+      },
+      { idempotencyKey },
+    );
+
+    if (error) {
+      console.error("Resend failed to send health assessment:", error);
+      return res.status(500).json({ ok: false, error: "Failed to send email" });
+    }
+
+    console.log(`Health assessment sent for ${data.email} (id: ${sent?.id})`);
     const resp: HealthAssessmentResponse = { ok: true };
     return res.json(resp);
   } catch (err) {
-    console.error("Error sending email:", err);
+    console.error("Error sending health assessment:", err);
     return res.status(500).json({ ok: false, error: "Failed to send email" });
   }
 };
