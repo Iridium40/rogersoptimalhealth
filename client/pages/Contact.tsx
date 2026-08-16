@@ -45,13 +45,7 @@ export default function Contact() {
             </a>
           </Button>
           <Button asChild>
-            <a
-              href={import.meta.env.VITE_CALENDLY_URL}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Book with Lenee
-            </a>
+            <a href="/book-assessment">Book with Lenee</a>
           </Button>
         </div>
         <div className="mt-4 text-sm text-foreground/80">
@@ -67,7 +61,7 @@ export default function Contact() {
           <span className="mx-2">•</span>
           <a
             className="text-primary hover:underline inline-flex items-center gap-1"
-            href="https://www.instagram.com/leneerogers/"
+            href="https://www.instagram.com/connectedwithlenee/"
             target="_blank"
             rel="noreferrer"
           >
@@ -77,7 +71,7 @@ export default function Contact() {
       </div>
 
       <div className="mt-8">
-        <InstagramEmbed permalink="https://www.instagram.com/leneerogers/" />
+        <InstagramEmbed permalink="https://www.instagram.com/connectedwithlenee/" />
       </div>
 
       <div className="mt-8 rounded-2xl border bg-white p-6 text-xs leading-6 text-muted-foreground">

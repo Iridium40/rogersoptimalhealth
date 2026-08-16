@@ -23,7 +23,7 @@ export default function WhyCoaching() {
         </p>
         <div className="mt-4 flex items-center justify-center gap-3">
           <a
-            href={import.meta.env.VITE_CALENDLY_URL}
+            href="/book-assessment"
             className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-white shadow hover:opacity-95"
           >
             Book with Lenee

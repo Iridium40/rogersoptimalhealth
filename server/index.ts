@@ -39,7 +39,6 @@ export function createServer() {
       "/book-assessment",
       "/my-story",
       "/why-coaching",
-      "/book-with-kayce",
       "/get-started",
       "/privacy",
 

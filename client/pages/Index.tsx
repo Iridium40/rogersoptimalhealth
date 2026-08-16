@@ -83,7 +83,7 @@ export default function Index() {
                   </p>
                   <div className="mt-3 text-sm">
                     <a
-                      href="https://www.instagram.com/leneerogers/"
+                      href="https://www.instagram.com/connectedwithlenee/"
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-2 text-primary hover:underline"
@@ -228,13 +228,7 @@ export default function Index() {
           </div>
           <div className="md:text-right">
             <Button asChild size="lg" className="shadow" variant="gradient">
-              <a
-                href="https://calendly.com/leneerogers/15min"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Book with Lenee
-              </a>
+              <a href="/book-assessment">Book with Lenee</a>
             </Button>
           </div>
         </div>
