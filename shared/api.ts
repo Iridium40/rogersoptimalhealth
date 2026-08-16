@@ -52,13 +52,39 @@ export interface HealthAssessmentResponse {
   ok: true;
 }
 
-export interface PinterestPin {
-  title: string;
-  description: string;
-  link: string;
-  image: string;
+export type RecipeCategory =
+  | "Chicken"
+  | "Seafood"
+  | "Beef"
+  | "Turkey"
+  | "Pork"
+  | "Vegetarian"
+  | "Breakfast";
+
+/** Lean & Green plan exchange counts for a single serving. */
+export interface RecipeCounts {
+  lean: number;
+  green: number;
+  fat: number;
+  condiment: number;
 }
 
-export interface PinterestResponse {
-  pins: PinterestPin[];
+export interface Recipe {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  category: RecipeCategory;
+  prepTime: number;
+  cookTime: number;
+  servings: number;
+  difficulty: "Easy" | "Medium" | "Hard";
+  counts: RecipeCounts;
+  ingredients: string[];
+  instructions: string[];
+  favoriteCount?: number;
+}
+
+export interface RecipesResponse {
+  recipes: Recipe[];
 }

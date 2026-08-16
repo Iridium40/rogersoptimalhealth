@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleHealthAssessment } from "./routes/health-assessment";
-import { handlePinterest } from "./routes/pinterest";
+import { handleRecipes } from "./routes/recipes";
 
 export function createServer() {
   const app = express();
@@ -24,8 +24,8 @@ export function createServer() {
   // Health Assessment form submission
   app.post("/api/health-assessment", handleHealthAssessment);
 
-  // Pinterest images (Lean & Green) from public board RSS
-  app.get("/api/pinterest", handlePinterest);
+  // Lean & Green recipes, proxied from the Health Coach Hub
+  app.get("/api/recipes", handleRecipes);
 
   // Sitemap
   app.get("/sitemap.xml", (_req, res) => {
