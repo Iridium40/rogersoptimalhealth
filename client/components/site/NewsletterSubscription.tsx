@@ -173,9 +173,10 @@ export default function NewsletterSubscription({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           email: email.trim(),
-          token: turnstileToken 
+          // Omit rather than send null when Turnstile isn't configured.
+          ...(turnstileToken ? { token: turnstileToken } : {}),
         }),
       });
 

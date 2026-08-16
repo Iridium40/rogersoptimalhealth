@@ -3,7 +3,9 @@ import { z } from "zod";
 
 const subscribeSchema = z.object({
   email: z.string().email("Invalid email address"),
-  token: z.string().optional(), // Turnstile token
+  // Turnstile token. nullish, not optional: the client sends `token: null`
+  // when no site key is configured, and .optional() only accepts undefined.
+  token: z.string().nullish(),
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -175,8 +177,11 @@ export default async function handler(req, res) {
     console.error("Newsletter subscription error:", error);
     
     if (error instanceof z.ZodError) {
+      // Report the field that actually failed — a blanket "Invalid email
+      // address" is misleading when the problem is another field.
+      const emailFailed = error.errors.some((e) => e.path[0] === "email");
       return res.status(400).json({
-        error: "Invalid email address",
+        error: emailFailed ? "Invalid email address" : "Invalid request",
         details: error.errors,
       });
     }
