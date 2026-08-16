@@ -9,8 +9,17 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     fs: {
-      allow: ["./client", "./shared"],
-      deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
+      allow: [".", "./client", "./shared"],
+      deny: [
+        ".env",
+        ".env.*",
+        "*.{crt,pem}",
+        "**/.git/**",
+        // Anchored to the project root: Vite matches slash-containing deny
+        // patterns against the absolute path, so a bare "server/**" never hits.
+        path.resolve(__dirname, "server") + "/**",
+        path.resolve(__dirname, "api") + "/**",
+      ],
     },
   },
   build: {
