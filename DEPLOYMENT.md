@@ -1,94 +1,87 @@
-# Production Deployment Guide
+# Deployment Guide
 
 ## Branch Strategy
 
-### Branches
-- **`main`** - Development branch for active development
-- **`production`** - Production-ready code, deployed to live site
-- **`staging`** - Optional staging branch for pre-production testing
+**`main` is the only long-lived branch, and it deploys straight to the live
+site.** There is no `production` branch and no PR gate. This matches the
+WellSmith site.
 
-### Code Lock Policy
-
-🔒 **PRODUCTION BRANCH IS LOCKED**
-
-- Direct pushes to `production` branch are **PROHIBITED**
-- All changes must go through Pull Request review process
-- Only approved, tested code can be merged to production
+A push to `main` triggers a production deployment on Vercel. There is nothing
+between a push and the live domain, so test locally before pushing.
 
 ## Deployment Process
 
-### 1. Development Workflow
 ```bash
-# Work on main branch
 git checkout main
 git pull origin main
 
-# Make changes, test locally
-pnpm dev
+# Make changes, then test locally
+pnpm dev            # dev server on :8080
+pnpm typecheck      # must be clean
+pnpm run build      # must succeed
 
-# Commit and push to main
 git add .
 git commit -m "Description of changes"
+git push origin main   # -> deploys to the live site
+```
+
+Feature branches are still fine for work in progress; they get Vercel preview
+URLs. Merging one into `main` deploys it.
+
+## Pre-Push Checklist
+
+Since a push goes live immediately:
+
+- [ ] `pnpm typecheck` clean
+- [ ] `pnpm run build` succeeds
+- [ ] Feature tested locally against the real page
+- [ ] No console errors
+- [ ] Forms tested if touched (see Email below)
+- [ ] Mobile layout checked if styling changed
+- [ ] SEO meta / structured data verified if markup changed
+
+## Email
+
+Both the health assessment and the newsletter send through **Resend**. There is
+no SMTP path.
+
+Required environment variables in Vercel:
+
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY` | Sending. Everything fails without a valid key. |
+| `FROM_EMAIL` | Sender. Its domain must be verified in Resend. |
+| `ADMIN_EMAIL` | Where health assessment submissions are delivered. |
+| `RESEND_AUDIENCE_ID` | Newsletter audience. |
+
+The health assessment email is the entire booking flow — Calendly was removed —
+so a bad key means enquiries fail silently. Verify the key after any rotation:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $RESEND_API_KEY" https://api.resend.com/domains
+```
+
+`200` is good. `401` means the key is invalid.
+
+## Rollback
+
+A bad deploy is reverted by shipping a revert commit:
+
+```bash
+git revert <bad-commit-sha>
 git push origin main
 ```
 
-### 2. Production Release
-```bash
-# Create PR from main to production
-# 1. Go to GitHub
-# 2. Create Pull Request: main → production  
-# 3. Fill out PR template with testing checklist
-# 4. Request review and approval
-# 5. After approval, merge PR
-```
+For an immediate fix while you investigate, use **Instant Rollback** in the
+Vercel dashboard (Deployments → pick the last good one → Promote to
+Production). That repoints the live domain without waiting for a build, and
+without touching git history.
 
-### 3. Vercel Deployment
-- **Development**: Auto-deploys from `main` branch to preview URL
-- **Production**: Only deploys from `production` branch to live domain
-- Use `vercel-production.json` for production builds
+## Recipes
 
-## Pre-Production Checklist
+The recipes page is served from the Health Coach Hub, proxied through
+`/api/recipes` because the upstream endpoint sends no CORS headers.
 
-Before merging to production:
-
-- [ ] ✅ All features tested locally
-- [ ] ✅ No console errors or warnings  
-- [ ] ✅ Google Analytics tracking verified
-- [ ] ✅ Newsletter functionality tested
-- [ ] ✅ All forms working properly
-- [ ] ✅ Mobile responsiveness checked
-- [ ] ✅ SEO meta tags verified
-- [ ] ✅ Performance optimized
-- [ ] ✅ Cross-browser compatibility
-- [ ] ✅ Code reviewed and approved
-
-## Emergency Hotfixes
-
-For critical production issues:
-
-1. Create hotfix branch from `production`
-2. Make minimal fix
-3. Test thoroughly
-4. Create PR to `production` 
-5. Get expedited review
-6. Deploy immediately after merge
-7. Backport fix to `main` branch
-
-## Rollback Process
-
-If issues occur in production:
-
-1. Revert the problematic commit on `production` branch
-2. Force push to trigger immediate redeployment
-3. Investigate and fix issues on `main` branch
-4. Create new PR when ready
-
-## Branch Protection Settings
-
-Recommended GitHub branch protection for `production`:
-
-- ✅ Require pull request reviews before merging
-- ✅ Require status checks to pass before merging  
-- ✅ Require branches to be up to date before merging
-- ✅ Restrict pushes that create files
-- ✅ Do not allow bypassing the above settings
+`RECIPES_SOURCE_URL` overrides the upstream URL. It is optional and defaults to
+`https://health-coach-hub.vercel.app/api/public/recipes`. If the hub moves or
+goes down, the recipes page goes empty — that variable is the escape hatch.
