@@ -1,3 +1,4 @@
+import { createHmac } from "node:crypto";
 import { Resend } from "resend";
 import { z } from "zod";
 
@@ -163,9 +164,7 @@ export default async function handler(req, res) {
         subject: "Welcome — I'm so glad you're here",
         html: getWelcomeEmailTemplate(email),
         text: getWelcomeEmailText(email),
-        headers: {
-          "List-Unsubscribe": `<${unsubscribeUrl(email)}>, <${unsubscribeMailto(email)}>`,
-        },
+        headers: unsubscribeHeaders(email),
       });
     } catch (emailError) {
       console.error("Error sending welcome email:", emailError);
@@ -223,6 +222,43 @@ function unsubscribeMailto(email) {
   return `mailto:lenee@rogersoptimalhealth.com?subject=${encodeURIComponent(
     "Unsubscribe",
   )}&body=${encodeURIComponent(`Please unsubscribe ${email} from the newsletter.`)}`;
+}
+
+/*
+ * One-click unsubscribe (RFC 8058).
+ *
+ * A one-click POST carries only "List-Unsubscribe=One-Click" in the body — the
+ * recipient is identified entirely by the URL. So the address is signed here
+ * and verified in api/newsletter/unsubscribe.js, which must use the same
+ * algorithm and secret.
+ *
+ * Without UNSUBSCRIBE_SECRET we cannot sign, so List-Unsubscribe-Post is
+ * omitted and the header points at the page instead. Declaring one-click
+ * against a URL that cannot honour it is worse than not declaring it: the mail
+ * provider reports success to the reader while nothing is unsubscribed.
+ */
+function unsubscribeHeaders(email) {
+  const secret = process.env.UNSUBSCRIBE_SECRET;
+  const mailto = `<${unsubscribeMailto(email)}>`;
+
+  if (!secret) {
+    return {
+      "List-Unsubscribe": `${mailto}, <${unsubscribeUrl(email)}>`,
+    };
+  }
+
+  const token = createHmac("sha256", secret)
+    .update(email)
+    .digest("hex")
+    .slice(0, 32);
+  const url =
+    `${BRAND.site}/api/newsletter/unsubscribe` +
+    `?e=${encodeURIComponent(email)}&t=${token}`;
+
+  return {
+    "List-Unsubscribe": `${mailto}, <${url}>`,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  };
 }
 
 function getWelcomeEmailTemplate(email) {

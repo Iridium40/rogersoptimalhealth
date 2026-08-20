@@ -1,9 +1,42 @@
 import type { RequestHandler } from "express";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 
 const emailSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
+
+/*
+ * One-click unsubscribe (RFC 8058).
+ *
+ * A one-click POST from a mail provider carries only
+ * "List-Unsubscribe=One-Click" in the body — the address lives in the URL, so
+ * it must be signed. The signature is produced by unsubscribeHeaders() in
+ * api/newsletter.js; both sides must use the same algorithm and secret. An
+ * unsigned ?e= would let anyone unsubscribe anyone.
+ */
+function verifiedOneClickEmail(query: unknown): string | null {
+  const secret = process.env.UNSUBSCRIBE_SECRET;
+  if (!secret) return null;
+
+  const q = (query || {}) as Record<string, unknown>;
+  const email = typeof q.e === "string" ? q.e : null;
+  const token = typeof q.t === "string" ? q.t : null;
+  if (!email || !token) return null;
+
+  const expected = createHmac("sha256", secret)
+    .update(email)
+    .digest("hex")
+    .slice(0, 32);
+
+  const a = Buffer.from(token);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !timingSafeEqual(a, b)) {
+    console.warn("One-click unsubscribe: signature mismatch");
+    return null;
+  }
+  return email;
+}
 
 /**
  * Marks a contact unsubscribed in the Resend audience.
@@ -43,15 +76,25 @@ async function unsubscribeFromAudience(
 
 export const handleNewsletterUnsubscribe: RequestHandler = async (req, res) => {
   try {
-    const validation = emailSchema.safeParse(req.body);
-    if (!validation.success) {
-      return res.status(400).json({
-        success: false,
-        error: "Please enter a valid email address",
-      });
+    // Two callers: the mail provider's one-click POST (signed address in the
+    // URL) and the on-site form (JSON body).
+    const oneClick = verifiedOneClickEmail(req.query);
+
+    let email: string;
+    if (oneClick) {
+      email = oneClick;
+    } else {
+      const validation = emailSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({
+          success: false,
+          error: "Please enter a valid email address",
+        });
+      }
+      email = validation.data.email;
     }
 
-    const result = await unsubscribeFromAudience(validation.data.email);
+    const result = await unsubscribeFromAudience(email);
 
     if (!result.ok) {
       return res.status(502).json({
