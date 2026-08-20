@@ -164,7 +164,7 @@ export default async function handler(req, res) {
         html: getWelcomeEmailTemplate(email),
         text: getWelcomeEmailText(email),
         headers: {
-          "List-Unsubscribe": `<${unsubscribeUrl(email)}>`,
+          "List-Unsubscribe": `<${unsubscribeUrl(email)}>, <${unsubscribeMailto(email)}>`,
         },
       });
     } catch (emailError) {
@@ -216,6 +216,10 @@ const FONT =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
 function unsubscribeUrl(email) {
+  return `${BRAND.site}/unsubscribe?email=${encodeURIComponent(email)}`;
+}
+
+function unsubscribeMailto(email) {
   return `mailto:lenee@rogersoptimalhealth.com?subject=${encodeURIComponent(
     "Unsubscribe",
   )}&body=${encodeURIComponent(`Please unsubscribe ${email} from the newsletter.`)}`;
@@ -435,7 +439,7 @@ Independent Trilivy Certified Health Coach
 ${BRAND.site}
 
 You're receiving this because you subscribed at ${email}.
-To unsubscribe, reply to this email with the subject "Unsubscribe".
+To unsubscribe: ${unsubscribeUrl(email)}
 
 ${TRILIVY_DISCLOSURE}
 `;

@@ -5,6 +5,7 @@ export interface SEOProps {
   description?: string;
   image?: string;
   canonical?: string;
+  noindex?: boolean;
 }
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
@@ -18,6 +19,10 @@ function upsertMeta(attr: "name" | "property", key: string, content: string) {
     document.head.appendChild(el);
   }
   el.setAttribute("content", content);
+}
+
+function removeMeta(name: string) {
+  document.head.querySelector(`meta[name='${name}']`)?.remove();
 }
 
 function setCanonical(href: string) {
@@ -38,6 +43,7 @@ export default function SEO({
   description,
   image,
   canonical,
+  noindex = false,
 }: SEOProps) {
   useEffect(() => {
     if (title) document.title = title;
@@ -60,6 +66,19 @@ export default function SEO({
       canonical || (typeof window !== "undefined" ? window.location.href : "");
     if (url) setCanonical(url);
   }, [title, description, image, canonical]);
+
+  // Robots is scoped to this component's lifetime rather than written on every
+  // render: several pages render no <SEO> at all, so a value left behind here
+  // would follow the visitor onto them. Removing the tag restores the default
+  // (index, follow).
+  useEffect(() => {
+    if (!noindex) {
+      removeMeta("robots");
+      return;
+    }
+    upsertMeta("name", "robots", "noindex,nofollow");
+    return () => removeMeta("robots");
+  }, [noindex]);
 
   return null;
 }

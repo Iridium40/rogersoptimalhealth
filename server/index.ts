@@ -4,6 +4,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleHealthAssessment } from "./routes/health-assessment";
 import { handleRecipes } from "./routes/recipes";
+import { handleNewsletterUnsubscribe } from "./routes/newsletter-unsubscribe";
 
 export function createServer() {
   const app = express();
@@ -26,6 +27,9 @@ export function createServer() {
 
   // Lean & Green recipes, proxied from the Health Coach Hub
   app.get("/api/recipes", handleRecipes);
+
+  // Newsletter unsubscribe
+  app.post("/api/newsletter/unsubscribe", handleNewsletterUnsubscribe);
 
   // Sitemap
   app.get("/sitemap.xml", (_req, res) => {

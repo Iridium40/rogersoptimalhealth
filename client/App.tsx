@@ -18,6 +18,7 @@ import MyStory from "@/pages/MyStory";
 import WhyCoaching from "@/pages/WhyCoaching";
 import GetStarted from "@/pages/GetStarted";
 import Privacy from "@/pages/Privacy";
+import Unsubscribe from "@/pages/Unsubscribe";
 import BlogGLP1Eating from "@/pages/blog/GLP1Eating";
 import BlogHydration from "@/pages/blog/Hydration";
 import BlogSleep from "@/pages/blog/Sleep";
@@ -50,6 +51,7 @@ const App = () => (
           />
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route
             path="/blog/eating-right-on-glp1"
             element={<BlogGLP1Eating />}
