@@ -155,12 +155,17 @@ export default async function handler(req, res) {
 
     // Send welcome email via Resend
     try {
-      const fromEmail = process.env.FROM_EMAIL || "hello@rogersoptimalhealth.com";
+      const fromEmail = process.env.FROM_EMAIL || "lenee@rogersoptimalhealth.com";
       await resend.emails.send({
         from: `Lenee Rogers <${fromEmail}>`,
         to: [email],
-        subject: "Welcome to Rogers Optimal Health! 🌟",
+        replyTo: fromEmail,
+        subject: "Welcome — I'm so glad you're here",
         html: getWelcomeEmailTemplate(email),
+        text: getWelcomeEmailText(email),
+        headers: {
+          "List-Unsubscribe": `<${unsubscribeUrl(email)}>`,
+        },
       });
     } catch (emailError) {
       console.error("Error sending welcome email:", emailError);
@@ -192,71 +197,246 @@ export default async function handler(req, res) {
   }
 }
 
+const BRAND = {
+  site: "https://rogersoptimalhealth.com",
+  logo: "https://vnxhtswabbhasfgtydvt.supabase.co/storage/v1/object/public/brand_media_assets/239e8c79-f5fd-466c-944f-772eed670dfa/239e8c79-f5fd-466c-944f-772eed670dfa-1787247916956-ovveed.jpg",
+  primary: "#5B8C5A",
+  secondary: "#2D5A4A",
+  accent: "#E8A54B",
+  muted: "#78716C",
+  body: "#3F3F46",
+  page: "#FAFAF9",
+};
+
+// Must appear verbatim at the end of every email.
+const TRILIVY_DISCLOSURE =
+  "This content is provided by an independent Trilivy health coach and is for general informational purposes only. It is not medical advice, and your coach is not a medical provider. The Trilivy 5&1 Reset is not appropriate for everyone — it is not intended for women who are pregnant or nursing, people under 18, sedentary adults 65+, people with gout, or those managing Type 1 diabetes. Consult your healthcare provider before starting this or any weight-loss program, especially if you take medications for diabetes, blood pressure, or thyroid conditions, or medications such as Coumadin (warfarin), lithium, or diuretics. Individual results vary. If you experience unusual symptoms or unusually rapid weight loss, stop and contact your healthcare provider.";
+
+const FONT =
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+
+function unsubscribeUrl(email) {
+  return `mailto:lenee@rogersoptimalhealth.com?subject=${encodeURIComponent(
+    "Unsubscribe",
+  )}&body=${encodeURIComponent(`Please unsubscribe ${email} from the newsletter.`)}`;
+}
+
 function getWelcomeEmailTemplate(email) {
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Welcome to Rogers Optimal Health!</title>
-      <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-        .header img { max-width: 200px; height: auto; margin-bottom: 20px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto; }
-        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-        .highlight { background: #667eea; color: white; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .cta { background: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0; }
-        .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
-      </style>
-    </head>
-    <body>
-      <div class="header">
-        <img src="https://rogersoptimalhealth.com/rogersoptimalhealth-logo.jpg" alt="Rogers Optimal Health Logo" width="200" style="max-width: 200px; height: auto; margin-bottom: 20px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;">
-        <h1>🌟 Welcome to Rogers Optimal Health!</h1>
-        <p>Your journey to optimal health starts now</p>
-      </div>
-      
-      <div class="content">
-        <p>Hi there!</p>
-        
-        <p>Thank you so much for subscribing to the Rogers Optimal Health newsletter! I'm Lenee Rogers, your Independent Trilivy Certified Health Coach, and I'm thrilled to have you join our community.</p>
-        
-        <div class="highlight">
-          <h3>🎯 What to Expect:</h3>
-          <ul>
-            <li><strong>Weekly Health Tips:</strong> Practical advice for sustainable lifestyle changes</li>
-            <li><strong>Lean & Green Recipes:</strong> Delicious, healthy meal ideas</li>
-            <li><strong>Success Stories:</strong> Inspiration from our community</li>
-            <li><strong>Exclusive Content:</strong> Early access to new programs and resources</li>
-          </ul>
-        </div>
-        
-        <p>As someone who has personally experienced the transformative power of optimal health, I understand the challenges and victories that come with this journey. Whether you're looking to:</p>
-        
-        <ul>
-          <li>Lose weight sustainably</li>
-          <li>Increase your energy levels</li>
-          <li>Develop healthier habits</li>
-          <li>Feel confident in your own skin</li>
-        </ul>
-        
-        <p>I'm here to support you every step of the way!</p>
-        
-        <a href="https://rogersoptimalhealth.com/get-started" class="cta">🚀 Start Your Journey Today</a>
-        
-        <p>Feel free to reply to this email with any questions or just to say hello - I love hearing from our community members!</p>
-        
-        <p>To your optimal health,<br>
-        <strong>Lenee Rogers</strong><br>
-        Independent Trilivy Certified Health Coach</p>
-      </div>
-      
-      <div class="footer">
-        <p>Rogers Optimal Health | <a href="https://rogersoptimalhealth.com">rogersoptimalhealth.com</a></p>
-        <p>You're receiving this because you subscribed to our newsletter at ${email}</p>
-      </div>
-    </body>
-    </html>
-  `;
+  // Gold (#E8A54B) is decorative only: it sits at 2.1:1 on white, so it never
+  // carries text. Each checkmark is paired with a word, never colour alone.
+  const check = `<span style="color:${BRAND.accent};font-weight:700;" aria-hidden="true">&#10003;</span>`;
+
+  const bullet = (title, text) => `
+              <tr>
+                <td style="padding:0 0 14px 0;font-family:${FONT};font-size:16px;line-height:1.6;color:${BRAND.body};">
+                  ${check}&nbsp;<strong style="color:${BRAND.secondary};">${title}</strong><br>
+                  <span style="color:${BRAND.body};">${text}</span>
+                </td>
+              </tr>`;
+
+  return `<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>Welcome to the Rogers Optimal Health newsletter</title>
+</head>
+<body style="margin:0;padding:0;background-color:${BRAND.page};">
+  <div lang="en" dir="ltr" style="margin:0;padding:0;">
+
+    <!-- Preheader: shown in the inbox preview, hidden in the body. -->
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;">
+      I'm so glad you're here. Here's what to expect — and there's no rush.
+    </div>
+
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:${BRAND.page};">
+      <tr>
+        <td align="center" style="padding:24px 12px;">
+
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;background-color:#FFFFFF;border-radius:12px;">
+
+            <!-- Header: white background, logo linked to the site -->
+            <tr>
+              <td align="center" style="padding:32px 32px 8px 32px;">
+                <a href="${BRAND.site}" style="text-decoration:none;">
+                  <img src="${BRAND.logo}" width="132" height="132" alt="Rogers Optimal Health" style="display:block;width:132px;height:132px;border:0;outline:none;">
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding:8px 32px 0 32px;">
+                <h1 style="margin:0;font-family:${FONT};font-size:26px;line-height:1.3;font-weight:700;color:${BRAND.primary};">
+                  Welcome — I'm so glad you're here
+                </h1>
+              </td>
+            </tr>
+
+            <!-- Accent rule -->
+            <tr>
+              <td align="center" style="padding:18px 32px 0 32px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr><td style="width:56px;height:3px;background-color:${BRAND.accent};border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:24px 32px 0 32px;font-family:${FONT};font-size:16px;line-height:1.65;color:${BRAND.body};">
+                <p style="margin:0 0 16px 0;">Hi there,</p>
+                <p style="margin:0 0 16px 0;">
+                  Thank you for subscribing. I'm Lenee Rogers, an Independent Trilivy
+                  Certified Health Coach — and someone who has walked this road myself,
+                  so I know how it feels to start again.
+                </p>
+                <p style="margin:0 0 24px 0;">
+                  This isn't about doing everything at once. It's about small,
+                  sustainable changes that hold up on ordinary weeks.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:0 32px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#F5F7F4;border-radius:10px;">
+                  <tr>
+                    <td style="padding:22px 22px 8px 22px;">
+                      <h2 style="margin:0 0 14px 0;font-family:${FONT};font-size:18px;line-height:1.4;font-weight:700;color:${BRAND.secondary};">
+                        What lands in your inbox
+                      </h2>
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+${bullet("Practical tips", "Small changes you can actually keep, without overhauling your life.")}
+${bullet("Lean &amp; Green recipes", "Simple meals worth repeating on a busy weeknight.")}
+${bullet("Encouragement", "Including the wins the scale never shows you.")}
+${bullet("Coaching resources", "Shared as they're ready — no pressure to use them.")}
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:24px 32px 0 32px;font-family:${FONT};font-size:16px;line-height:1.65;color:${BRAND.body};">
+                <p style="margin:0;">
+                  If and when you'd like to talk through what this could look like for
+                  you, I'd love to hear from you. There's no rush, and no pressure —
+                  whenever you're ready.
+                </p>
+              </td>
+            </tr>
+
+            <!-- CTA: primary green, white text, rounded -->
+            <tr>
+              <td align="center" style="padding:26px 32px 4px 32px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td align="center" style="background-color:${BRAND.primary};border-radius:8px;">
+                      <a href="${BRAND.site}/book-assessment" style="display:inline-block;padding:15px 30px;font-family:${FONT};font-size:19px;line-height:1.2;font-weight:700;color:#FFFFFF;text-decoration:none;">
+                        Book a free health assessment
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding:14px 32px 0 32px;font-family:${FONT};font-size:14px;line-height:1.6;color:${BRAND.muted};">
+                Or just reply to this email — it comes straight to me.
+              </td>
+            </tr>
+
+            <!-- Signature -->
+            <tr>
+              <td style="padding:28px 32px 32px 32px;font-family:${FONT};font-size:16px;line-height:1.6;color:${BRAND.body};">
+                <p style="margin:0;">Warmly,</p>
+                <p style="margin:4px 0 0 0;font-weight:700;color:${BRAND.secondary};">Lenee Rogers</p>
+                <p style="margin:2px 0 0 0;font-size:14px;color:${BRAND.muted};">Independent Trilivy Certified Health Coach</p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="padding:0 32px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                  <tr><td style="height:1px;background-color:#E7E5E4;font-size:0;line-height:0;">&nbsp;</td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding:24px 32px 0 32px;">
+                <img src="${BRAND.logo}" width="56" height="56" alt="" style="display:block;width:56px;height:56px;border:0;outline:none;">
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding:12px 32px 0 32px;font-family:${FONT};font-size:13px;line-height:1.6;color:${BRAND.muted};">
+                <a href="${BRAND.site}" style="color:${BRAND.muted};text-decoration:underline;">rogersoptimalhealth.com</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding:10px 32px 0 32px;font-family:${FONT};font-size:13px;line-height:1.6;color:${BRAND.muted};">
+                You're receiving this because you subscribed at ${email}.<br>
+                <a href="${unsubscribeUrl(email)}" style="color:${BRAND.muted};text-decoration:underline;">Unsubscribe from these emails</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:18px 32px 32px 32px;font-family:${FONT};font-size:12px;line-height:1.6;color:${BRAND.muted};">
+                ${TRILIVY_DISCLOSURE}
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>`;
+}
+
+function getWelcomeEmailText(email) {
+  return `Welcome — I'm so glad you're here
+
+Hi there,
+
+Thank you for subscribing. I'm Lenee Rogers, an Independent Trilivy Certified
+Health Coach — and someone who has walked this road myself, so I know how it
+feels to start again.
+
+This isn't about doing everything at once. It's about small, sustainable
+changes that hold up on ordinary weeks.
+
+WHAT LANDS IN YOUR INBOX
+
+* Practical tips - Small changes you can actually keep, without overhauling
+  your life.
+* Lean & Green recipes - Simple meals worth repeating on a busy weeknight.
+* Encouragement - Including the wins the scale never shows you.
+* Coaching resources - Shared as they're ready, no pressure to use them.
+
+If and when you'd like to talk through what this could look like for you, I'd
+love to hear from you. There's no rush, and no pressure — whenever you're ready.
+
+Book a free health assessment: ${BRAND.site}/book-assessment
+
+Or just reply to this email — it comes straight to me.
+
+Warmly,
+Lenee Rogers
+Independent Trilivy Certified Health Coach
+
+${BRAND.site}
+
+You're receiving this because you subscribed at ${email}.
+To unsubscribe, reply to this email with the subject "Unsubscribe".
+
+${TRILIVY_DISCLOSURE}
+`;
 }
